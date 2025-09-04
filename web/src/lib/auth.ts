@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { Lucia } from "lucia";
+import { TimeSpan } from "oslo";
 
 export const lucia = new Lucia(new PrismaAdapter(prisma.session, prisma.user), {
   sessionCookie: {
@@ -8,14 +9,10 @@ export const lucia = new Lucia(new PrismaAdapter(prisma.session, prisma.user), {
     attributes: {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      httpOnly: true,
       path: "/",
     },
   },
-  sessionExpiresIn: {
-    activePeriod: 1000 * 60 * 60 * 24 * 7,
-    idlePeriod: 1000 * 60 * 60 * 24 * 30,
-  },
+  sessionExpiresIn: new TimeSpan(30, "d"),
   getUserAttributes: (user) => ({
     username: user.username,
     email: user.email,
