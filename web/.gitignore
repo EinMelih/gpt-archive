@@ -3,6 +3,7 @@
 ToDo.md
 package-lock.json
 ./.next
+migration_lock.toml
 # dependencies
 /node_modules
 /.pnp
@@ -42,3 +43,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
