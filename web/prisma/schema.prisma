@@ -14,51 +14,65 @@ enum TokenScope {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  username      String   @unique @db.VarChar(50)
-  email         String   @unique @db.VarChar(254)
-  passwordHash  String               // Argon2id/Bcrypt – niemals Klartext
-  tokenVersion  Int      @default(0) // ++ => alle bestehenden JWTs invalid
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(uuid())
+  username     String   @unique @db.VarChar(50)
+  email        String   @unique @db.VarChar(254)
+  passwordHash String // Argon2id/Bcrypt – niemals Klartext
+  tokenVersion Int      @default(0) // ++ => alle bestehenden JWTs invalid
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  chats         Chat[]
-  tokens        UserToken[]
+  chats    Chat[]
+  tokens   UserToken[]
+  sessions Session[]
 
   @@index([email])
   @@index([username])
 }
 
 model Chat {
-  id         String   @id @default(uuid())
-  userId     String
-  chatname   String   @db.VarChar(200)
-  chatlog    Json
-  model      String?  @db.VarChar(100)
-  sourceUrl  String?  @db.VarChar(2000)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(uuid())
+  userId    String
+  chatname  String   @db.VarChar(200)
+  chatlog   Json
+  model     String?  @db.VarChar(100)
+  sourceUrl String?  @db.VarChar(2000)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt(sort: Desc)])
   @@index([createdAt(sort: Desc)])
 }
 
 model UserToken {
-  id           String      @id @default(uuid())
-  userId       String
-  name         String      @db.VarChar(100)     // z.B. "Chrome @Laptop"
-  tokenHash    String      @unique              // NUR Hash speichern!
-  tokenPrefix  String      @unique @db.VarChar(12) // z.B. erste 12 Zeichen von raw
-  scopes       TokenScope[] @default([read, write])
-  createdAt    DateTime    @default(now())
-  expiresAt    DateTime?
-  lastUsedAt   DateTime?
-  revoked      Boolean     @default(false)
+  id          String       @id @default(uuid())
+  userId      String
+  name        String       @db.VarChar(100) // z.B. "Chrome @Laptop"
+  tokenHash   String       @unique // NUR Hash speichern!
+  tokenPrefix String       @unique @db.VarChar(12) // z.B. erste 12 Zeichen von raw
+  scopes      TokenScope[] @default([read, write])
+  createdAt   DateTime     @default(now())
+  expiresAt   DateTime?
+  lastUsedAt  DateTime?
+  revoked     Boolean      @default(false)
 
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([revoked, expiresAt])
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
 }

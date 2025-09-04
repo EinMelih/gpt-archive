@@ -3,7 +3,8 @@
 ToDo.md
 package-lock.json
 ./.next
-migration_lock.toml
+prisma/migrations
+.node_modules
 # dependencies
 /node_modules
 /.pnp
