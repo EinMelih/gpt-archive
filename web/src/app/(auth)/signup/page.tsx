@@ -1,4 +1,7 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 export default function SignUpPage() {
@@ -46,14 +49,10 @@ export default function SignUpPage() {
   return (
     <div className="mx-auto max-w-md p-6">
       <h1 className="text-2xl font-semibold mb-4">Sign Up</h1>
-      <form onSubmit={onSubmit} className="grid gap-3">
-        <div className="grid gap-1">
-          <input
-            name="username"
-            placeholder="Username"
-            className="border p-2 rounded"
-            required
-          />
+      <form onSubmit={onSubmit} className="grid gap-4">
+        <div className="grid gap-1.5">
+          <Label htmlFor="username">Username</Label>
+          <Input id="username" name="username" required />
           <p className="text-xs text-neutral-500">
             Erlaubt: Buchstaben, Zahlen und Punkt. 3–20 Zeichen, kein Punkt am
             Anfang/Ende, keine zwei Punkte hintereinander.
@@ -66,14 +65,9 @@ export default function SignUpPage() {
             </ul>
           ) : null}
         </div>
-        <div className="grid gap-1">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="border p-2 rounded"
-            required
-          />
+        <div className="grid gap-1.5">
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" name="email" required />
           <p className="text-xs text-neutral-500">
             Gültige Email-Adresse erforderlich.
           </p>
@@ -85,14 +79,9 @@ export default function SignUpPage() {
             </ul>
           ) : null}
         </div>
-        <div className="grid gap-1">
-          <input
-            type="password"
-            name="password"
-            placeholder="Passwort"
-            className="border p-2 rounded"
-            required
-          />
+        <div className="grid gap-1.5">
+          <Label htmlFor="password">Passwort</Label>
+          <Input id="password" type="password" name="password" required />
           <p className="text-xs text-neutral-500">
             Mind. 8 Zeichen, mit Groß-/Kleinbuchstabe, Zahl und Sonderzeichen.
           </p>
@@ -105,12 +94,9 @@ export default function SignUpPage() {
           ) : null}
         </div>
         {err && <p className="text-red-600 text-sm">{err}</p>}
-        <button
-          disabled={loading}
-          className="h-10 rounded bg-violet-600 text-white"
-        >
+        <Button disabled={loading} type="submit">
           {loading ? "..." : "Create account"}
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -1,4 +1,15 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -32,30 +43,65 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md p-6">
-      <h1 className="text-2xl font-semibold mb-4">Sign In</h1>
-      <form onSubmit={onSubmit} className="grid gap-3">
-        <input
-          name="emailOrUsername"
-          placeholder="Email oder Username"
-          className="border p-2 rounded"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Passwort"
-          className="border p-2 rounded"
-          required
-        />
-        {err && <p className="text-red-600 text-sm">{err}</p>}
-        <button
-          disabled={loading}
-          className="h-10 rounded bg-neutral-900 text-white"
-        >
-          {loading ? "..." : "Sign in"}
-        </button>
-      </form>
+    <div className="min-h-[100dvh] bg-[radial-gradient(1000px_600px_at_50%_0%,rgba(255,255,255,0.06),transparent)] flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Login</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={onSubmit} className="grid gap-4">
+            <div className="grid gap-1.5">
+              <Label htmlFor="emailOrUsername">Username</Label>
+              <div className="relative">
+                <Input
+                  id="emailOrUsername"
+                  name="emailOrUsername"
+                  required
+                  className="rounded-full pl-10"
+                />
+                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-neutral-400">
+                  👤
+                </span>
+              </div>
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type="password"
+                  name="password"
+                  required
+                  className="rounded-full pl-10"
+                />
+                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-neutral-400">
+                  🔒
+                </span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <label className="inline-flex items-center gap-2">
+                <Checkbox /> <span>Remember me</span>
+              </label>
+              <a href="#" className="text-neutral-300 hover:underline">
+                Forgot Password?
+              </a>
+            </div>
+            {err && <p className="text-red-600 text-sm">{err}</p>}
+            <Button disabled={loading} type="submit" className="rounded-full">
+              {loading ? "..." : "Log in"}
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter>
+          <span>
+            Don't have an account?{" "}
+            <a href="/signup" className="underline">
+              Register
+            </a>
+          </span>
+        </CardFooter>
+      </Card>
     </div>
   );
 }
